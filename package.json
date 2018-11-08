@@ -8,7 +8,7 @@
     "functional programing",
     "fp"
   ],
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "\"pipe for Js\"",
   "main": "pipe.js",
   "author": "Keep Zen",
