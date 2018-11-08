@@ -27,38 +27,48 @@ Look at the last line, there is no `bind` or some thing like that.
 When functional programing in JS, I want to write more cleaner code and more
 easier to write the code, so I write this one.
 
-# How to use?
-1. First install:
+# Install
  + npm:
    `npm install @keepzen/pipe.js`
  + yarn:
    `yarn add @keepzen/pipe.js`  
-2. use pipe.js
- ```js
- const pipeable = require('@keepzen/pipe.js');
- ```
- `pipeable` is a function, you can pass it a function and zero or more arguments
- the function need, and `pipeable` will return a new function which can pipe to
- other functions.
 
- The returned function call be called directly, just like the normal one. But
- it check the number of the arguments and the parameters of the function which
- passed to the `pipeable`. Like the fellow code:
+## Usage
+```js
+const pipe = require('@keepzen/pipe.js');
+```   
+# API
 
- ```js
- function f1(a,b){
-   return a+ b;
- }
- const f2 = pipeable(f1);
- f1() // return NAN
- f2() // throw a error say f1 required 2 arguments
- f2(1)// throw error
- f2(1,2)// return 2
- function f3(a,b){
-   return a + b;
- }
- f2.pipe(f3)// throw error say f2 required the last 1 argument.
- const f = f2.pipe(f2,1)
- f()// throw error say f1 required 2 arguments
- ```
-Good luck and have joy with pipe.js.
+## Pipe values to functions
+
+Use pipe.js you can pipe value to functions, like that:
+
+```js
+const pipe = require('@keepzen/pipe.js');
+
+pipe(1).pipe(console.log);//print to 1
+pipe(1).pipe( (a,b,c)=>a+b+c,2,3 ).pipe(console.log)//print 6
+```
+
+## Pipe a function to other functions
+Pass a function to `pipe`, like pass a value to it, you get a object,
+which can pipe to other functions.
+
+If the function `fn` pass to the first `pipe`, and it's length is zero,
+the value of the `pipe()` is the value of `fn()`.
+
+If the length of `fn` is less than x, and equal or more than x arguments pass
+to `pipe` same time as `fn`, like `pipe(fn, a,b,c)`, the value of the returned
+is same value of `fn(a,b,c)`;
+
+If length of `fn` is n(n>1), but there is less than n arguments pass to `fn` at
+same time with `fn`, like `pipe(fn,a)` will return a function required n-1
+arguments.
+
+```js
+const f1 =()=>1
+const f2 =(a,b)=>a+b
+pipe(f1) ;// return 1
+pipe(1).pipe(console.log);//print 1
+pipe(f2).pipe(f2,3)(1,2);// return 6
+```
