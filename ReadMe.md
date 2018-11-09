@@ -1,26 +1,28 @@
-# Why I write this?
-How you use JS to functional programing?
+# Why write this?
+How you functional programing in JS?
 
 Let's look some example use Rambda.js
 
 ```js
+ const R = require(`ramda`);
  const f1 = (a) => a ;
  const f2 = (a,b) => a + b;
  const f = R.pipe( f1,f2.bind(null,2) )(1); //f is 3
 ```
 
-If functions are all function require one argument, that is fine. but if there
+If functions are all required just one argument, that is fine. but if there
 are some functions required more than one arguments, `pipe` or `compose` are
-not nice any more.
+not nice any more in many  JS functional programing frames.
 
 I think we can do better.
 
 Use pipe.js, the same functional code can write like this:
 
 ```js
-const f1 = (a)=>a+1;
+const pipe = require('@keepzen/pipe.js');
+const f1 = (a)=>a;
 const f2 =(_,b)=>_+b;
-const f = pipeable(f1).pipe(f2,2)(1);
+const f = pipe(f1).pipe(f2,2)(1);
 ```
 Look at the last line, there is no `bind` or some thing like that.
 
@@ -41,13 +43,14 @@ const pipe = require('@keepzen/pipe.js');
 
 ## Pipe values to functions
 
-Use pipe.js you can pipe value to functions, like that:
+Use pipe.js you can pipe values to functions, like that:
 
 ```js
 const pipe = require('@keepzen/pipe.js');
 
 pipe(1).pipe(console.log);//print to 1
 pipe(1).pipe( (a,b,c)=>a+b+c,2,3 ).pipe(console.log)//print 6
+pipe(1,2).pipe(console.log) //print([1,2])
 ```
 
 ## Pipe a function to other functions
@@ -71,4 +74,13 @@ const f2 =(a,b)=>a+b
 pipe(f1) ;// return 1
 pipe(1).pipe(console.log);//print 1
 pipe(f2).pipe(f2,3)(1,2);// return 6
+```
+## Syntactic sugar
+
+Somebody have proposal add new operator to JS
+[`|>`](https://yanis.blog/the-pipeline-operator-in-javascript/). Use pipe.js
+we can use it now.
+
+```js
+npx candy path-to-the-file-have-syntatic-sugar-"|>"
 ```

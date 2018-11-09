@@ -4,13 +4,16 @@ function makePipeObj(v){
   const f1 = constValue(v);
   f1[length] = 0;
   if( !(v instanceof Object) ){
-    const ret = {
-      valueOf:()=>v
-    };
+    const ret = Object.create(null);
+    ret.valueOf=()=>v;
+    ret.toString=()=>v.toString? v: v.toString();
     ret.pipe=pipe.bind(ret,f1);
     return ret;
   }else{
-    v.pipe=pipe(v,f1);
+    v.pipe=pipe.bind(v,f1);
+    if(v instanceof Array){
+      v[length] = true;
+    }
     return v;
   }
 }
@@ -21,8 +24,14 @@ function pipe(f1,f2,...restArgs ){
     const messageTail = (lF2 == 0) ? 'argument.': ` ${lF2} arguments.`;
     throw Error(`${f2.name} require last ${messageTail}`);
   }
-  if(f1[length] == 0){
-    return makePipeObj(f2(f1(),...restArgs) );
+  if(f1[length] === 0){
+    let ret = f1();
+    if(ret instanceof Array && ret[length] === true ){
+      ret = [...ret,...restArgs];
+    }else{
+      ret = [ret, ...restArgs];
+    }
+    return makePipeObj(f2(...ret) );
   }else{
     //We need dealy to call f1
     const pipeFn = (...args)=>{
@@ -32,6 +41,26 @@ function pipe(f1,f2,...restArgs ){
     pipeFn.pipe= pipe.bind(this,pipeFn);
     return pipeFn;
   }
+}
+
+function candy(sugarCode){
+  let lines = sugarCode.split("\n");
+  const reqPa = /=\s*require\(\s*(['`"])@keepzen\/pipe\.js\1\s*\)/;
+  let name;
+  return lines.map(line=>{
+    // console.log(`line:${line}:${reqPa.test(line)}`);
+    if(reqPa.test(line) ){
+      let z=line.split(reqPa)[0].split(/\s/);
+      // console.log(z);
+      z.pop();
+      name = z.pop();
+    }
+    if(line.includes('|>')){
+      return line.split('|>').map( a => `${name}(${a.trim()})`).join("\n.")
+    }else{
+      return line;
+    }
+  }).join("\n");
 }
 
 function pipeable (fn, ...restArgs) {
@@ -54,4 +83,14 @@ function pipeable (fn, ...restArgs) {
     return pipeFn;
   }
 }
-module.exports = pipeable;
+
+if(require.main == module){
+  let argv = process.argv;
+  const fs = require('fs');
+  console.log(argv);
+  let sugarCode = fs.readFileSync(argv[2]).toString();
+  console.log(candy(sugarCode));
+}else{
+  pipeable.candy = candy;
+  module.exports = pipeable;
+}
