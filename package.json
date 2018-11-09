@@ -3,13 +3,16 @@
   "scripts": {
     "test": "npx jest"
   },
+  "bin": {
+    "candy": "./pipe.js"
+  },
   "keywords": [
     "pipe",
     "functional programing",
     "fp"
   ],
-  "homepage":"https://github.com/KeepZen/pipe.js",
-  "version": "0.0.3",
+  "homepage": "https://github.com/KeepZen/pipe.js",
+  "version": "0.0.4",
   "description": "\"pipe for Js\"",
   "main": "pipe.js",
   "author": "Keep Zen",
