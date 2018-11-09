@@ -16,6 +16,11 @@ test(
     pipe( ()=> 2).pipe(fn);
     expect(fn.mock.calls[1][0]).toBe(2);
 
+    const f1 = (a) => a;
+    const f2 = (_,b) => _ + b;
+    const f = pipe(f1).pipe(f2,2)(1)
+    expect( f == 3 ).toBe(true)
+
     pipe((a)=>a,1).pipe( (_,b)=>_+b,2 ).pipe(fn);
     expect(fn.mock.calls[2][0]).toBe(1+2);
 

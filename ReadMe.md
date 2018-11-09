@@ -4,7 +4,7 @@ How you use JS to functional programing?
 Let's look some example use Rambda.js
 
 ```js
- const f1 = (a) => a + 1 ;
+ const f1 = (a) => a ;
  const f2 = (a,b) => a + b;
  const f = R.pipe( f1,f2.bind(null,2) )(1); //f is 3
 ```
@@ -18,7 +18,7 @@ I think we can do better.
 Use pipe.js, the same functional code can write like this:
 
 ```js
-const f1 = (a)=>a + b;
+const f1 = (a)=>a+1;
 const f2 =(_,b)=>_+b;
 const f = pipeable(f1).pipe(f2,2)(1);
 ```

@@ -8,6 +8,7 @@
     "functional programing",
     "fp"
   ],
+  "homepage":"https://github.com/KeepZen/pipe.js",
   "version": "0.0.3",
   "description": "\"pipe for Js\"",
   "main": "pipe.js",
