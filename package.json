@@ -13,7 +13,7 @@
   ],
   "homepage": "https://github.com/KeepZen/pipe.js",
   "version": "0.0.5",
-  "description": "\"pipe for Js\"",
+  "description": "\"pipeline for Js\"",
   "main": "pipe.js",
   "author": "Keep Zen",
   "license": "GFDL-1.3-or-later",
