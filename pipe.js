@@ -76,6 +76,9 @@ function candy(sugarCode){
 }
 
 function pipeable (fn, ...restArgs) {
+  if(fn === undefined ){
+    throw Error('first argument can not be undefined.');
+  }
   if(typeof fn != 'function'){
     if(restArgs.length == 0){
       return makePipeObj(fn);
