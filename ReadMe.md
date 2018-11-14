@@ -1,5 +1,5 @@
 <div id="en">
-<a src="#cn" id="aToCN">中文</a>
+<a href="#cn" id="aToCN">中文</a>
 
 # Why write this?
 How you write functional programing code with JS?
@@ -126,7 +126,7 @@ Please replace `_at_` with `@`.
 
 <div id="cn" style="display:none">
 
-<a src="#en" id="aToEN">English</a>
+<a href="#en" id="aToEN">English</a>
 
 # 为什么要写这个库?
 在学习 JS 函数编程的过程时, 思维被迫的以数学函数组合的方式来运行,
