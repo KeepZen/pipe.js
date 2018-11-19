@@ -1,10 +1,9 @@
-<div id="en">
 <a href="#cn" id="aToCN">中文</a>
 
 # Why write this?
 How you write functional programing code with JS?
 
-Let's look some example use Rambda.js
+Let's look a example use Rambda.js
 
 ```js
  const R = require(`rabmda`);
@@ -13,9 +12,9 @@ Let's look some example use Rambda.js
  const f = R.pipe( f1,f2.bind(null,2) )(1); //f is 3
 ```
 
-If functions are all require just one argument, that is fine. But if there
-are some functions required more than one arguments, `pipe` and/or `compose`
-are not nice any more in many JS functional programing frames/libs.
+If length of functions are all 1, that is fine. But if there
+are some functions require more than one arguments, `pipe` and/or `compose`
+are not nice any more in many JS functional programing frameworks/libs.
 
 I think it can be done better.
 
@@ -32,8 +31,8 @@ Look at the last line, there is no `bind` or some thing like that.
 In the 3rd line `_` is just a normal variable, nothing special, I use it just
 to tip you this argument is from the value of the `pipe(f1)`.
 
-When functional program with JS, I want to write more cleaner code and more
-easier to write the code, so I write this one.
+When functional program with JS, I want to **write more cleaner code** and **more
+easier to write the code**, so I write this one.
 
 # Install
  + npm:
@@ -124,7 +123,7 @@ how to it. You can contact me with Email:
 Please replace `_at_` with `@`.
 </div>
 
-<div id="cn" style="display:none">
+---
 
 <a href="#en" id="aToEN">English</a>
 
@@ -252,29 +251,3 @@ function f2(a,b){return a+b}
 **Keep.In.Zen_at_pm.me**
 
 别忘记把 `_at_` 换成 `@`!
-</div>
-<script>
-const $ = document.querySelector.bind(document);
-function click(id){
-  switch(id){
-    case "aToEN":
-    return ()=>{
-      $("#cn").style.display="none";
-      $("#en").style.display="";
-    }
-    case "aToCN":
-    return ()=>{
-      $("#en").style.display="none";
-      $("#cn").style.display="";
-    }
-  }
-}
-function main() {
-  ["aToEn","aToCN"].forEach(
-    id =>{
-      $(id).onclick = click(id);
-    }
-  );
-}
-main();
-</script>

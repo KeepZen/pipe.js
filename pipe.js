@@ -47,7 +47,7 @@ function pipe(f1,f2,...restArgs ){
         `${lF2-restArgs.length} arguments.`;
         throw Error(`${f2.name} require last ${messageTail}`);
       }
-      return f2(f1(...args), ...restArgs);
+      return makePipeObj( f2(f1(...args), ...restArgs) );
     };
     pipeFn[length] = f1[length];
     pipeFn.pipe= pipe.bind(this,pipeFn);

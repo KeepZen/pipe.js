@@ -37,7 +37,7 @@ test(
     expect(fn.mock.calls[1][0]).toBe(1+2);
 
     pipe( (a)=>a ).pipe(b=>b).pipe((_,c,d)=>_+c+d,2,3).pipe(fn)(1);
-    expect(fn.mock.calls[2][0]).toBe(6)
+    expect(fn.mock.calls[2][0]+0).toBe(6)
   }
 )
 test(
