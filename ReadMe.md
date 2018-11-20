@@ -1,7 +1,7 @@
-<a href="#cn" id="aToCN">中文</a>
+<a href="#cn" id="en">中文</a>
 
 # Why write this?
-How you write functional programing code with JS?
+How do you write functional programing code with JS?
 
 Let's look a example use Rambda.js
 
@@ -103,8 +103,8 @@ f5(1,2)//return (1+2)+1
 ```
 ## Syntactic sugar
 
-Somebody have proposal add new operator
-[`|>`](https://yanis.blog/the-pipeline-operator-in-javascript/) to JS.
+[There is a proposal to add new operator `|>` to JS.](https://yanis.blog/the-pipeline-operator-in-javascript/)
+
 I think `|>` can be work as a  syntactic sugar of `@keepzen/pipe.js`:
 
 ```js
@@ -125,11 +125,11 @@ Please replace `_at_` with `@`.
 
 ---
 
-<a href="#en" id="aToEN">English</a>
+<a href="#en" id="cn">English</a>
 
 # 为什么要写这个库?
-在学习 JS 函数编程的过程时, 思维被迫的以数学函数组合的方式来运行,
-比如各种库中提供的 `compose()`, 完全的模仿的是数学上的函数组合.
+在学习 JS 函数编程的过程中, 思维被迫的以数学函数组合的方式来运行,
+比如各种库中提供的 `compose()`, 完全的模仿的是数学上的函数组合过程.
 `compose(f1,f2,f3)()`, 执行的顺序是 f3, f2, f1, 这太不符合我的思维习惯了.
 我想, 这应该也是不符合大部分程序员的思维习惯的, 不然的话, 函数编程库就不需要特意提供
 `pipe()` 这个除了函数的执行从左向右外, 其他功能完全一样的函数了.
@@ -148,12 +148,14 @@ Please replace `_at_` with `@`.
  const f = R.pipe( f1,f2.bind(null,2) )(1); //f is 3
 ```
 
-`R.pipe()` 的参数都是只要求一个参数的函数, 否则就没法工作. 为了个缘故, Rambda.js
-和其他库一样, 为我们提供了大量的对函数做部化的工具. 这些工具在一定程度上固然解决了问题,
+`R.pipe()` 的参数全部必须是只要一个参数的函数, 否则就没法工作. 为了个缘故, Rambda.js
+和其他库一样, 为我们提供了大量的对函数做部化的工具.
+这些工具函数在一定程度上固然解决了问题,
 但是工具库太大了, 从中找出需要的工具已经变得有些困难了.
 
-为了让 `compose()` 更好的工作,  函数式编程库几乎把 JS 中操作符有全部的实现了一边,
-例如 Rambda.js 中, 你就能看到大量的诸如 `add:(+)`, `lt:(<)` 的函数.
+为了让 `compose()` 更好的工作,  函数式编程库几乎把 JS 中操作符又全部的实现了一边,
+例如 Rambda.js 中, 你就能看到大量的诸如 `add()` (对应 `+`), `lt()` (对应 `<`)
+的函数.
 
 我认为, 应该有更好的解决方案.
 
