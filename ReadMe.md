@@ -34,16 +34,6 @@ to tip you this argument is from the value of the `pipe(f1)`.
 When functional program with JS, I want to **write more cleaner code** and **more
 easier to write the code**, so I write this one.
 
-# Install
- + npm:
-   `npm install @keepzen/pipe.js`
- + yarn:
-   `yarn add @keepzen/pipe.js`  
-
-## Usage
-```js
-const pipe = require('@keepzen/pipe.js');
-```   
 # Document
 
 ## Pipe values to functions
@@ -175,13 +165,6 @@ const f = pipe(f1).pipe(f2,2)(1);
 在调用的时候, 这个参数的值是从上一个函数 `f1` 的返回值中得到的.
 
 在 JS 中函数式编程, **写出更清晰的代码, 更轻松的写代码**, 这就是我写这个库的目标.
-
-# 安装
-+ npm: `npm install @keepzen/pipe.js`
-+ yarn: `yarn add @keepzen/pipe.js`
-
-# 使用
-`const pipe= require('@keepzen/pipe.js');`
 
 # 文档
 

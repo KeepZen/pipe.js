@@ -55,25 +55,7 @@ function pipe(f1,f2,...restArgs ){
   }
 }
 
-function candy(sugarCode){
-  let lines = sugarCode.split("\n");
-  const reqPa = /=\s*require\(\s*(['`"])@keepzen\/pipe\.js\1\s*\)/;
-  let name;
-  return lines.map(line=>{
-    // console.log(`line:${line}:${reqPa.test(line)}`);
-    if(reqPa.test(line) ){
-      let z=line.split(reqPa)[0].split(/\s/);
-      // console.log(z);
-      z.pop();
-      name = z.pop();
-    }
-    if(line.includes('|>')){
-      return line.split('|>').map( a => `${name}(${a.trim()})`).join("\n.")
-    }else{
-      return line;
-    }
-  }).join("\n");
-}
+
 
 function pipeable (fn, ...restArgs) {
   if(fn === undefined ){
@@ -106,6 +88,5 @@ if(require.main == module){
   let sugarCode = fs.readFileSync(argv[2]).toString();
   console.log(candy(sugarCode));
 }else{
-  pipeable.candy = candy;
   module.exports = pipeable;
 }

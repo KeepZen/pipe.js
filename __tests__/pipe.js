@@ -40,22 +40,3 @@ test(
     expect(fn.mock.calls[2][0]+0).toBe(6)
   }
 )
-test(
-  "candy",
-  ()=>{
-    const sugar =
-`
-const pipe = require('@keepzen/pipe.js');
-function f1(n){return n}
-1 |> f1
-`
-    const js=
-`
-const pipe = require('@keepzen/pipe.js');
-function f1(n){return n}
-pipe(1)
-.pipe(f1)
-`;
-    expect( pipe.candy(sugar) ).toBe( js )
-  }
-)
