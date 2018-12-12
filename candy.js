@@ -8,10 +8,14 @@ function locateFirstPipeToken(sugar) {
     try{
       const script = new vm.Script(sugar,{filename});
     }catch(err){
-      if(err.message == 'Unexpected token >'){
+      let msg = err.message;
+      if(msg == 'Unexpected token >' || msg == 'Unexpected token |'){
         const {0:errorLineMessage,2:t}=err.stack.split("\n");
         let lineNO=lineNumberPattern.exec(errorLineMessage)[1]-0;
-        let cNo = t.length-1;
+        let cNo = t.length;
+        if(msg == 'Unexpected token >'){
+          cNo -= 1;
+        }
         return [lineNO,cNo];
       }else{
         console.log(err);
@@ -22,39 +26,75 @@ function locateFirstPipeToken(sugar) {
   return null;
 }
 
-function transform(sugar) {
-  let ret = locateFirstPipeToken(sugar);
-  if(ret == null){
-    return sugar;
-  }
-  else{
-    let [rowNO,columNO] = ret;
-    let rows=sugar.split("\n");
-    let newRows=rows.map(
-      (rowString,index)=>{
-        if(index!= rowNO-1){
-          return rowString;
+const r = String.raw;
+const pipeOperator = new RegExp(
+  r`\s*`
+  + r`([^\)\(\|>]*)` //firstOd
+  + r`\s*\|>\s*` // |> operater
+  + r`([^\)\(\|>]+)` // function name
+  + r`\s*\(` // function call begin
+  + r`([^\)\(]*)`// function call arguemnts
+  + r`\)[\t ]*(;*)` // function call end
+  + r`([^$]*)` // otherCode
+  + "$"
+  ,
+  "m"
+);
+const mutilNewLine = /\n+$/g;
+
+function transform(candyCode, ret='', piped=false) {
+  const locatePipeOperator=locateFirstPipeToken(candyCode);
+  if( locatePipeOperator != null ){
+    const rowNo = locatePipeOperator[0]-1;
+    let needHandler='';
+    candyCode.split("\n").forEach(
+      (row,i)=>{
+        if(i >= rowNo){
+          needHandler += row+"\n";
         }else{
-          let [first,seconde, ...other] = rowString.split("|>");
-          let {1:functionName,2:args,3:end} = functionCallPattern.exec(seconde);
-          const head=`pipe(${first.trim()}).pipe(${functionName.trim()}`+
-            `${
-              (args==null || args.trim() == "") ? "":","+args
-            })${end||""}`;
-          if(other.length>0){
-            return head+"\n|>"+other.join("|>")
-          }else{
-            return head;
-          }
+          ret += row+'\n';
         }
       }
-    ).map(
-      line=>{
-        return line.replace(emptyPipeCallPatter,"  $1");
-      }
-    )
-    return transform(newRows.join("\n"));
+    );
+    let array = pipeOperator.exec(needHandler);
+    let {
+      1:firstOd,
+      2:fun,
+      3:args,
+      4:isEnd,
+      5:otherCode
+    } = array;
+    array=null;
+    firstOd = firstOd.trim();
+    args = args.trim();
+    if(args != ""){
+      args = ","+args;
+    }
+    isEnd = (isEnd !=""?",":"");
+    switch(true)
+    {
+      case piped == true && firstOd =='' :
+        if(ret[ret.length-1] != '\n'){
+          ret +='\n'
+        }
+        ret += `  .pipe(${fun}${args})`;
+      break;
+      case piped == false && firstOd != '':
+        ret += `pipe(${firstOd})`;
+        ret += `\n  .pipe(${fun}${args})`;
+      break;
+      default:
+      throw {candyCode,piped,firstOd};
+    }
+    if( isEnd != ''){
+      ret +=";"
+      return transform(otherCode,ret,false);
+    }else{
+      return transform(otherCode,ret,true);
+    }
   }
+  //candyCode no have |>
+  return ret+candyCode.replace(mutilNewLine,"\n");
 }
 
 module.exports={

@@ -1,4 +1,6 @@
-<a href="#cn" id="en">中文</a>
+<a href="#cn" id="en">阅读中文</a>
+# What is New?
+
 
 # Why write this?
 How do you write functional programing code with JS?
