@@ -1,8 +1,12 @@
 <a href="#cn" id="en">阅读中文</a>
 # What is New?
 
++ 2018-12-12  
+  we can use `|>` as syntactic sugar of `@keepzen/pipe.js`.
 
-# Why write this?
+  See more [Sytatic Sugar](#sugar) section.
+
+# Why Write This?
 How do you write functional programing code with JS?
 
 Let's look a example use Rambda.js
@@ -38,7 +42,7 @@ easier to write the code**, so I write this one.
 
 # Document
 
-## Pipe values to functions
+## Pipe Values to Functions
 
 Use @keepzen/pipe.js you can pipe values to functions, like this:
 
@@ -67,7 +71,7 @@ pipe(v) === v // this one is false
 Object.is(pipe(v),v) // this also false
 ```
 
-## Pipe a function to other functions
+## Pipe a Function to Other Functions
 
 Pass a function to `pipe()`, like pass values to it, you get a **OBJECT**,
 which can pipe to other functions.
@@ -93,31 +97,67 @@ f4(2)// return 3
 const f5 = pipe(f2).pipe(f2,1) // a function, require (2-0) argument
 f5(1,2)//return (1+2)+1
 ```
-## Syntactic sugar
+
+## Syntactic Sugar <a id="sugar"></a>
 
 [There is a proposal to add new operator `|>` to JS.](https://yanis.blog/the-pipeline-operator-in-javascript/)
 
 I think `|>` can be work as a  syntactic sugar of `@keepzen/pipe.js`:
 
+Use this syntactic sugar, first we need install this package.
+
+Suppose we have a file named `test.pjs`, it content as:
+
 ```js
 function f1(a){console.log(a)}
-1 |> f() // change to: pipe(1).pipe(f)
+1 |> f()
 function f2(a,b){return a+b}
-1 |> f2(2) // change to: pipe(1).pipe(f2,2)
+1 |> f2(2)
 ```
-This work is doing, but I find I am not good at this one.
 
-I will very happy if somebody can do it or provide some help/tips about
-how to it. You can contact me with Email:
+After run fellow command:
 
-**Keep.In.Zen_at_pm.me**
+```sh
+npx keepzenPipe test.pjs > test.js
+```
+We get a new file `test.js`, it comment will like that:
+
+```js
+const pipe= require("@keepzen/pipe.js");
+function f1(a){console.log(a)}
+pipe(1)
+  .pipe(f)
+function f2(a,b){return a+b}
+pipe(1)
+  .pipe(f2,2)
+```
+
+`|>` is need two operated, the first one is a JS express, and the second one is
+a function call.
+
+Now it work. But now the function must define in some other place, not
+fellow the pipe operator `|>`. The fellow code is fine code, but now, `candy`
+can not handle it.
+
+```js
+1 |> ((a,b)=>a+b)(2)
+```
+If you can give me some tips to handle some thing like that one,
+please contact me with fellow mail:
+
+**Keep.In.Zen_at_pm.me** .
 
 Please replace `_at_` with `@`.
 </div>
 
 ---
 
-<a href="#en" id="cn">English</a>
+<a href="#en" id="cn">Reading English</a>
+# 更新
++ 2018-12-12  
+  现在可以使用 `|>` 来做为 `@keepzen/pipe.js` 的语法糖了.
+
+  更多细节查看[语法糖](#sugar_cn) 小结.
 
 # 为什么要写这个库?
 在学习 JS 函数编程的过程中, 思维被迫的以数学函数组合的方式来运行,
@@ -218,22 +258,47 @@ const f5 = pipe(f2).pipe(f2,1) // a function, require (2-0) argument
 f5(1,2)//return (1+2)+1
 ```
 
-## 语法糖
+## 语法糖 <a id="sugar_cn"></a>
 有人以及提议在 JS 中加入新的操作
 [`|>`](https://yanis.blog/the-pipeline-operator-in-javascript/).
 我认为, `|>` 操作符号, 可以作为 pipe.js 的语法糖来实现.
 
+要使用这个语法糖, 必须首先安装这个 npm 库.
+
+假设现在文件 `test.pjs` 中有如下的代码:
+
 ```js
 function f1(a){console.log(a)}
-1 |> f() //等同于: pipe(1).pipe(f)
+1 |> f()
 function f2(a,b){return a+b}
-1 |> f2(2) //等同于: pipe(1).pipe(f,2)
+1 |> f2(2)
 ```
 
-这个工作现在还没有完成, 而且我发现, 我不善于做这个工作.
+那么使用命令:
+```shell
+npx keepzenPipe test.pjs >test.js
+```
+将会生成如下的 test.js 文件, 其内容如下:
 
-希望有人愿意完成这个工作, 或者对如何完成这个工作提供帮助, 建议.
-我的联系邮箱为:
+```js
+const pipe= require("@keepzen/pipe.js");
+function f1(a){console.log(a)}
+pipe(1)
+  .pipe(f)
+function f2(a,b){return a+b}
+pipe(1)
+  .pipe(f2,2)
+```
+
+`|>` 是一个二元操作符, 其中第一个操作数是一个 JS 表达式, 第二个操作数是一个函数调用.
+
+这个工作现在基本上完成了. 但是第二个操作数中的函数, 必须在其他地方定义,
+而不能在操作符号 `|>` 后面直接定义. 下面的代码是合法的代码, 但是现在, `candy`
+命令还不能处理.
+```js
+1 |> ((a,b)=>a+b)(2)
+```
+欢迎大家给出处理这种情况的建议, 可以通过一下邮箱和我联系:
 
 **Keep.In.Zen_at_pm.me**
 

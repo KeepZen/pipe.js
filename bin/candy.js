@@ -79,12 +79,12 @@ function transform(candyCode, ret='', piped=false) {
         }
         ret += `  .pipe(${fun}${args})`;
       break;
-      case piped == false && firstOd != '':
+      case firstOd != '':
         ret += `pipe(${firstOd})`;
         ret += `\n  .pipe(${fun}${args})`;
       break;
       default:
-      throw {candyCode,piped,firstOd};
+      throw {candyCode,piped,fun,firstOd,otherCode};
     }
     if( isEnd != ''){
       ret +=";"
@@ -94,10 +94,25 @@ function transform(candyCode, ret='', piped=false) {
     }
   }
   //candyCode no have |>
-  return ret+candyCode.replace(mutilNewLine,"\n");
+  if(require.main == module && ret!='') {
+    ret = `const pipe= require("@keepzen/pipe.js");\n${ret}`
+  }
+  return ret.replace(mutilNewLine,"\n")+candyCode.replace(mutilNewLine,"\n");
 }
-
-module.exports={
-  transform,
-  locateFirstPipeToken,
+if(require.main == module){
+  const fs = require('fs');
+  if(process.argv.length == 3){
+    let candy = fs.readFileSync(process.argv[2]);
+    console.log(transform(candy.toString()));
+  }else{
+    console.log(
+      process.argv.join(" ") +
+      " file_include_pipeline_operatoer_code > target.js"
+    )
+  }
+}else{
+  module.exports={
+    transform,
+    locateFirstPipeToken,
+  }
 }

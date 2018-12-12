@@ -1,7 +1,7 @@
 const {
   locateFirstPipeToken,
   transform,
-} = require('../candy.js')
+} = require('../bin/candy.js')
 
 
 const pipeToConsole =`
