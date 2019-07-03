@@ -1,19 +1,19 @@
 {
   "name": "@keepzen/pipe.js",
   "scripts": {
-    "test": "npx jest",
-    "candy":"keepzenPipe"
+    "test": "npx jest"
   },
   "bin": {
     "keepzenPipe": "./bin/candy.js"
   },
   "keywords": [
     "pipe",
+    "pipeline",
     "functional programing",
     "fp"
   ],
   "homepage": "https://github.com/KeepZen/pipe.js",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "pipeline for Js",
   "main": "pipe.js",
   "author": "Keep Zen",
