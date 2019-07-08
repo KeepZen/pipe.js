@@ -32,15 +32,17 @@ function Pipe(v = PlaceHolderForPipe, ...others) {
     }
     const value = others.length == 0 ? v : [v, ...others];
     const pipe = valuesPipeTo(v, ...others);
-    const fun = JSON.stringify.bind(this, value);
+    const map = pipe;
     return {
       valueOf: () => value,
       pipe,
+      map,
     }
   } else {
     throw SyntaxError(`At least you shold pipe one value, but you pipe none.`)
   }
 }
+Pipe.of = Pipe;
 
 module.exports = {
   Pipe,
