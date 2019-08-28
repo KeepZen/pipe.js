@@ -24,45 +24,42 @@ test("Pipe() throw error", () => {
 test('Pipe(v).pipe(f)', () => {
   let fn = jest.fn();
   let z = Pipe(1).pipe(fn);
-  expect(fn).toBeCalledWith(1);
   expect(z).toHaveProperty('pipe');
+  expect(z + "" === "undefined").toBe(true);
+  expect(fn).toBeCalledWith(1);
 })
-test('Pipe(a,b).pipe((a,b,c)=>a+b+c,"c")', () => {
+test('Pipe(a).pipe((a,b,c)=>a+b+c,"b","c")', () => {
   let fn = jest.fn((a, b, c) => a + b + c);
-  let z = Pipe('a', 'b').pipe(fn, 'c');
+  let z = Pipe('a').pipe(fn, 'b', 'c');
+  expect(fn).not.toHaveBeenCalled();
+  expect(z == 'abc').toBe(true);
   expect(fn).toBeCalledWith('a', 'b', 'c');
-  expect(z.valueOf()).toBe('abc');
 })
-test(`Pipe(a,c).pipe((a,b,c)=>a+b+c,_,'b',_)`, () => {
-  let fn = jest.fn((a, b, c) => a + b + c);
-  let ret = Pipe('a', 'c').pipe(fn, _, 'b', _);
-  expect(fn).toBeCalledWith('a', 'b', 'c');
-  expect(ret == 'abc').toBe(true);
-})
-test(`Pipe(a).pipe( (a,b)=>a+b) throw error`, () => {
-  try {
-    let a = 1;
-    Pipe(a).pipe((a, b) => a + b);
-    expect("Not run here").toBe("but it is.");
-  } catch (err) {
-    console.log(err.message)
-    expect(err).not.toBe(null);
-  }
-})
+
 test('Pipe(a).pipe(a=>a+1).pipe( (b,c)=>b+c, c) == a+1+c', () => {
   let a = 1;
-  let ret = Pipe(a).pipe(a => a + 1).pipe((b, c) => b + c, 'c');
-  expect(ret == a + 1 + 'c').toBe(true);
+  let fn1 = jest.fn(a => a + 1);
+  let fn2 = jest.fn((b, c) => b + c);
+  let ret = Pipe(a).pipe(fn1);
+  expe
+  ct(fn1).not.toBeCalled();
+  expect(ret == a + 1).toBe(true);
+  expect(fn1).toBeCalledTimes(1);
+  ret = ret.pipe(fn2, 'c');
+  expect(ret == '2c').toBe(true);
+  expect(fn1).toBeCalledTimes(2);
+  expect(fn2).toBeCalledTimes(1);
 })
 
-test(`Pipe(a).pipe(a=>a+1).pipe( (b,c)=>b+c) throw error`, () => {
-  try {
-    let a = 1;
-    Pipe(a).pipe(a => a + 1).pipe((b, c) => b + c)
-    expect("Not run here").toBe("but it is.");
-  } catch (err) {
-    console.log(err.message)
-    expect(err).not.toBe(null);
-  }
+test(`Pipe(a).pipe(a=>a+1).pipe( (b,c)=>b+c)`, () => {
+  let a = 1;
+  let fn = jest.fn((b, c) => b + c)
+  let ret = Pipe(a).pipe(a => a + 1).pipe(fn);
+  expect(ret.valueOf()).toBe(NaN);
+  expect(fn).toBeCalledWith(2);
 })
 
+test("Pipe(a).pipe((a,b,c)=>a+b+c,a,_,c)", () => {
+  let z = Pipe.of(2).pipe((a, b, c) => a + b + c, 'a', _, "c");
+  expect(z == 'a2c').toBe(true);
+})

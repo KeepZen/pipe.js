@@ -1,0 +1,72 @@
+[[https://img.shields.io/npm/v/@keepzen/pipe.js.svg]]
+[[https://img.shields.io/npm/dm/@keepzen/pipe.js.svg]]
+[[https://img.shields.io/npm/dt/@keepzen/pipe.js.svg]]
+
+[[zh][跳转到汉语]] <<en>>
+* Pipe <a id="en"></a>
+** Make a pipable
+=Pipe(v)= or =Pipe.of(v)=.
+
+=Pipe= return a object we called =pipable= because it have a method 
+=pipe(fn,...args)=.
+
+A =pipable= object have methods show as fellow:
++ =valueOf()= : the =v= you want to pipe to other function.
+
+  So ~Pipe(a).valueOf() === a~ is always =true=.
+  
+  If =a= is primary type but neither =null= nor =undefined= then ~Pipe(a) == a~
+  is true.
++ =pipe(fun,...args)= : =fun= is a function, =args= are the rest arguments you
+  want pipe to =fun=.
+
+  + If =args= do not included =Pipe.PleaceHolderForPipe=, =fun= will be called as
+   =fun(...[v,...args])=.
+
+  + If =args= included one =Pipe.PleaceHolderForPipe=, =pipable.valueOf()= will 
+   instead of the =Pipe.PleaceHolderForPipe=, and =fun= will be called as 
+   =fun(...args)=.
+
++ =map(fun,...args)= : the alias of =pipe=
+
+** How to Use
+#+include: "./pipe.test.js" src js
+** =pipable.pipe(fn,...args)= is lazy
+
+=pipable.pipe(fn,...args)= will return a new pipable object, not change the old one.
+The =fn= will not be called until the new =pipable.valueOf()= have been called.
+As fellow show:
+
+#+incldue: "./pipe.test.js" src js :line "39-52"
+
+[[en][Go to Read English]] <<zh>>
+* 管道 <a id="zh"></a>
+** 指定 pipe 到哪个参数
+我们把 =Pipe(v)= 得到的对象叫做 =pipable=, 因为这个对象有一个 =pipe(fun,...args)= 方法,
+可以把其中的值 =v= 作为参数传递给 函数 =fun=.
+
+=pipable.pipe(fun,...args)=
+
+当 =args= 中 *不含* /占位符/ 的时候, =pipable.pipe(fun,...args)= 这样 =fun(..[v,...args])= 来调用 =fun=.
+也就是说, 默认 =v=, =others= 是放在 =args= 的前面的.
+
+
+
+例如:
+
+#+include: "./pipe.test.js" src js :lines "1-61"
+
+当 =args= 中 *含有* _一个_ /占位符/ 的时候, =v= 会替换掉 =args= 中出现的占位符,
+然后 =fun(...args)= 来调用 =fun= 函数.
+
+=args= 中去掉占位符后, 元素的个数, 加上 =others= 中的元素个数,
+再加 1 (=v=) 必须大于等于 =fun= 要求的参数个数, 否则就会抛出语法错误.
+
+例如:
+#+include: "./pipe.test.js" src js :lines "61"
+** =pipable.pipe(fn,...args)= 是惰性的
+=pipable.pipe(fn,...args)= 会返回一个新的 pipable 对象, 而不该改变旧的对象.
+
+只有当新的 =pipable= 对象的 =valueOf()= (显示的或隐式)被调用, =fn= 才会被调用.
+
+#+include: "./pipe.test.js" src js :lines "39-53"
