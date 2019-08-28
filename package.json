@@ -3,9 +3,6 @@
   "scripts": {
     "test": "npx jest"
   },
-  "bin": {
-    "keepzenPipe": "./bin/candy.js"
-  },
   "keywords": [
     "pipe",
     "pipeline",
@@ -13,13 +10,10 @@
     "fp"
   ],
   "homepage": "https://github.com/KeepZen/pipe.js",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "pipeline for Js",
   "main": "pipe.js",
   "author": "Keep Zen",
   "license": "MIT",
-  "private": false,
-  "devDependencies": {
-    "jest": "^23.6.0"
-  }
+  "private": false
 }
