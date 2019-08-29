@@ -1,9 +1,11 @@
+#+OPTIONS: toc:nil ^:{}
+
 [[https://img.shields.io/npm/v/@keepzen/pipe.js.svg]]
 [[https://img.shields.io/npm/dm/@keepzen/pipe.js.svg]]
 [[https://img.shields.io/npm/dt/@keepzen/pipe.js.svg]]
 
-[[zh][跳转到汉语]] <<en>>
-* Pipe <a id="en"></a>
+#+TOC: headlines 2
+* Pipe
 ** Make a pipable
 =Pipe(v)= or =Pipe.of(v)=.
 
@@ -37,10 +39,9 @@ A =pipable= object have methods show as fellow:
 The =fn= will not be called until the new =pipable.valueOf()= have been called.
 As fellow show:
 
-#+incldue: "./pipe.test.js" src js :line "39-52"
+#+include: "./pipe.test.js" src js :lines "39-52"
 
-[[en][Go to Read English]] <<zh>>
-* 管道 <a id="zh"></a>
+* 管道
 ** 指定 pipe 到哪个参数
 我们把 =Pipe(v)= 得到的对象叫做 =pipable=, 因为这个对象有一个 =pipe(fun,...args)= 方法,
 可以把其中的值 =v= 作为参数传递给 函数 =fun=.

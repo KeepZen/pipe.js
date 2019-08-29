@@ -41,8 +41,7 @@ test('Pipe(a).pipe(a=>a+1).pipe( (b,c)=>b+c, c) == a+1+c', () => {
   let fn1 = jest.fn(a => a + 1);
   let fn2 = jest.fn((b, c) => b + c);
   let ret = Pipe(a).pipe(fn1);
-  expe
-  ct(fn1).not.toBeCalled();
+  expect(fn1).not.toBeCalled();
   expect(ret == a + 1).toBe(true);
   expect(fn1).toBeCalledTimes(1);
   ret = ret.pipe(fn2, 'c');
