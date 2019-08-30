@@ -62,3 +62,14 @@ test("Pipe(a).pipe((a,b,c)=>a+b+c,a,_,c)", () => {
   let z = Pipe.of(2).pipe((a, b, c) => a + b + c, 'a', _, "c");
   expect(z == 'a2c').toBe(true);
 })
+
+test('Pipe.of(promise).pipe(fun)', () => {
+  let a = Pipe.of(Promise.resolve(1));
+  expect(a.valueOf()).toBeInstanceOf(Promise);
+  let fn = jest.fn();
+  let ret = a.pipe(fn).valueOf();
+  expect(ret).toBeInstanceOf(Promise);
+  ret.then(() => {
+    expect(fn).toBeCalledWith([1]);
+  });
+})

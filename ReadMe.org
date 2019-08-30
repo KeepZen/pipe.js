@@ -40,6 +40,12 @@ The =fn= will not be called until the new =pipable.valueOf()= have been called.
 As fellow show:
 
 #+include: "./pipe.test.js" src js :lines "39-52"
+** =pipeable<promise>.pipe(fn,...args)=
+If the value of a pipable is a =Promise=, 
+=pipable.pipe(fn)= pipe the resolve value of the promise to =fn=,
+and return a new promise pipable.
+*** Examaples
+#+include: "pipe.test.js" src js :lines "66-76"
 
 * 管道
 ** 指定 pipe 到哪个参数
@@ -51,10 +57,7 @@ As fellow show:
 当 =args= 中 *不含* /占位符/ 的时候, =pipable.pipe(fun,...args)= 这样 =fun(..[v,...args])= 来调用 =fun=.
 也就是说, 默认 =v=, =others= 是放在 =args= 的前面的.
 
-
-
-例如:
-
+*** 用法示例
 #+include: "./pipe.test.js" src js :lines "1-61"
 
 当 =args= 中 *含有* _一个_ /占位符/ 的时候, =v= 会替换掉 =args= 中出现的占位符,
@@ -63,11 +66,18 @@ As fellow show:
 =args= 中去掉占位符后, 元素的个数, 加上 =others= 中的元素个数,
 再加 1 (=v=) 必须大于等于 =fun= 要求的参数个数, 否则就会抛出语法错误.
 
-例如:
-#+include: "./pipe.test.js" src js :lines "61"
-** =pipable.pipe(fn,...args)= 是惰性的
+*** 例如:
+#+include: "./pipe.test.js" src js :lines "61-65"
+** =pipe.pipe(fn,...args)= 是惰性的
 =pipable.pipe(fn,...args)= 会返回一个新的 pipable 对象, 而不该改变旧的对象.
 
 只有当新的 =pipable= 对象的 =valueOf()= (显示的或隐式)被调用, =fn= 才会被调用.
-
+*** 例如
 #+include: "./pipe.test.js" src js :lines "39-53"
+** =pipable<promise>.pipe(fun,...args)=
+如果一个 =pipable.vlaueOf()= 返回的是一个 =Promise=,
+那么 =pipable.pipe(fn,...args)= 会把这个 Promise 的 resolve 值传递到
+=fn= 函数中, 并返回一个新的 =valueOf()= 类型为 Promise 的 pipeable.
+
+*** 代码示例
+#+include: "./pipe.test.js" src js :lines "66-76"

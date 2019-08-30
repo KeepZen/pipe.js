@@ -1,18 +1,24 @@
 const PlaceHolderForPipe = Symbol('place Holder for pipe');
 const Undefined = Symbol();
-
+const _call = (fun, index, pipeValue, other) => {
+  const fond = index != -1;
+  if (fond) {
+    other[index] = pipeValue;
+  } else {
+    other.unshift(pipeValue);
+  }
+  return fun(...other);
+}
 const _pipe = (pipeable, fun, ...other) => {
   const newPipeable = Pipe(Undefined);
   newPipeable.valueOf = () => {
     const index = other.findIndex(v => v == PlaceHolderForPipe);
-    const fond = index != -1;
-    const pipeValue = pipeable.valueOf();
-    if (fond) {
-      other[index] = pipeValue;
+    const valueOrPromise = pipeable.valueOf();
+    if (valueOrPromise instanceof Promise) {
+      return valueOrPromise.then(value => _call(fun, index, value, other));
     } else {
-      other.unshift(pipeValue);
+      return _call(fun, index, valueOrPromise, other);
     }
-    return fun(...other);
   }
   return newPipeable;
 }
