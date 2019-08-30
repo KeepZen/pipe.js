@@ -1,12 +1,10 @@
 #+OPTIONS: toc:nil ^:{}
-
 [[https://img.shields.io/npm/v/@keepzen/pipe.js.svg]]
 [[https://img.shields.io/npm/dm/@keepzen/pipe.js.svg]]
 [[https://img.shields.io/npm/dt/@keepzen/pipe.js.svg]]
 
 #+TOC: headlines 2
 * Pipe
-** Make a pipable
 =Pipe(v)= or =Pipe.of(v)=.
 
 =Pipe= return a object we called =pipable= because it have a method 
@@ -30,9 +28,13 @@ A =pipable= object have methods show as fellow:
    =fun(...args)=.
 
 + =map(fun,...args)= : the alias of =pipe=
++ =then=: ~(resolve[,reject])=>Promise~ 
+  This method return a =Promise=, *not* a =Pipable=.
 
-** How to Use
-#+include: "./pipe.test.js" src js
+  If you call this method the =pipe= chains broken,
+  so the good position of this method should at the end of the =pipe= chains.
+** Use place holder specal pipe to which argument of =fn=
+#+include: "./pipe.test.js" src js :lines "61-66"
 ** =pipable.pipe(fn,...args)= is lazy
 
 =pipable.pipe(fn,...args)= will return a new pipable object, not change the old one.
@@ -45,7 +47,10 @@ If the value of a pipable is a =Promise=,
 =pipable.pipe(fn)= pipe the resolve value of the promise to =fn=,
 and return a new promise pipable.
 *** Examaples
-#+include: "pipe.test.js" src js :lines "66-76"
+#+include: "pipe.test.js" src js :lines "66-79"
+
+** =pipeable.then=: ~(resolve[,reject])=>Promise~
+Convert a pipable to a Promise.
 
 * 管道
 ** 指定 pipe 到哪个参数
@@ -67,7 +72,7 @@ and return a new promise pipable.
 再加 1 (=v=) 必须大于等于 =fun= 要求的参数个数, 否则就会抛出语法错误.
 
 *** 例如:
-#+include: "./pipe.test.js" src js :lines "61-65"
+#+include: "./pipe.test.js" src js :lines "61-66"
 ** =pipe.pipe(fn,...args)= 是惰性的
 =pipable.pipe(fn,...args)= 会返回一个新的 pipable 对象, 而不该改变旧的对象.
 
@@ -80,4 +85,10 @@ and return a new promise pipable.
 =fn= 函数中, 并返回一个新的 =valueOf()= 类型为 Promise 的 pipeable.
 
 *** 代码示例
-#+include: "./pipe.test.js" src js :lines "66-76"
+#+include: "./pipe.test.js" src js :lines "66-79"
+** =pipeable.then=: ~(resolve[,reject])=>Promise~
+把 =pipable= 转化为一个 Promise 对象.
+
+因为这个函数返回的是一个 Promise 对象, *而不是* pipable, 
+所以这个方法调用后 =pipe= 函数链 就被打断了, 因此应该在 =pipe= 
+函数链的末尾调用这个方法.

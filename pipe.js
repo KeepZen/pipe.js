@@ -32,12 +32,21 @@ function Pipe(v = PlaceHolderForPipe, ...others) {
     const ret = {}
     const pipe = _pipe.bind(null, ret);
     const map = pipe;
+    const then = async (resolve, reject = () => undefined) => {
+      try {
+        const valueOf = ret.valueOf();
+        return resolve(valueOf);
+      } catch (err) {
+        return reject(err);
+      }
+    }
     return Object.assign(
       ret,
       {
         pipe,
         map,
         valueOf,
+        then,
       }
     );
   } else {

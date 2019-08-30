@@ -59,17 +59,20 @@ test(`Pipe(a).pipe(a=>a+1).pipe( (b,c)=>b+c)`, () => {
 })
 
 test("Pipe(a).pipe((a,b,c)=>a+b+c,a,_,c)", () => {
+  const { Pipe, PlaceHolderForPipe: _ } = require("@keepzen/pipe.js");
   let z = Pipe.of(2).pipe((a, b, c) => a + b + c, 'a', _, "c");
   expect(z == 'a2c').toBe(true);
 })
 
-test('Pipe.of(promise).pipe(fun)', () => {
+test('Pipe.of(promise).pipe(fun)', (done) => {
   let a = Pipe.of(Promise.resolve(1));
   expect(a.valueOf()).toBeInstanceOf(Promise);
   let fn = jest.fn();
-  let ret = a.pipe(fn).valueOf();
-  expect(ret).toBeInstanceOf(Promise);
+  let ret = a.pipe(fn);
   ret.then(() => {
-    expect(fn).toBeCalledWith([1]);
+    expect(fn).toBeCalledWith(1);
+    done();
   });
+  expect(ret).toHaveProperty('then');
+  expect(ret.valueOf()).toBeInstanceOf(Promise);
 })
