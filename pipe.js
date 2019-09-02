@@ -1,61 +1,65 @@
-const PlaceHolderForPipe = Symbol('place Holder for pipe');
-const Undefined = Symbol();
-const _call = (fun, index, pipeValue, other) => {
-  const fond = index != -1;
-  if (fond) {
-    other[index] = pipeValue;
+const _ = Symbol();
+
+function pipe(valueOrValuOfFunc) {
+  const valueOf = typeof valueOrValuOfFunc == 'function' ? valueOrValuOfFunc : () => valueOrValuOfFunc;
+  const pipe = _pipe(valueOf, false);
+  const promise_rescue = _pipe(valueOf, true);
+  return {
+    valueOf,
+    pipe,
+    map: pipe,
+    promise_rescue,
+  }
+}
+
+const _pipe = (valueOf, isRescue) => (fun, ...other) => {
+  const newValueOf = () => {
+    const v = valueOf();
+    if (v instanceof Promise) {
+      return _promise(v, other, fun, isRescue);
+    } else {
+      return _normal(v, other, fun);
+    }
+  }
+  return pipe(newValueOf)
+}
+
+const _promise = async (v, other, fun, rescue) => {
+  let reason = null;
+  try {
+    v = await v;
+  } catch (err) {
+    reason = err;
+  } finally {
+    const needPipeFun = !rescue && reason == null;
+    const needPipeRescue = rescue && reason != null;
+    //When (!needPipeFun && !needPipeRescue)
+    const canSkip = !(needPipeFun || needPipeRescue)
+    if (canSkip) {
+      return v;
+    }
+    if (needPipeFun) {
+      return _normal(v, other, fun);
+    }
+    if (needPipeRescue) {
+      return _normal(reason, other, fun)
+    }
+  }
+}
+const _normal = (v, other, fun, ) => {
+  const index = other.findIndex(value => value == _);
+  const fondIndex = index >= 0;
+  if (fondIndex) {
+    other[index] = v;
   } else {
-    other.unshift(pipeValue);
+    other.unshift(v);
   }
   return fun(...other);
 }
-const _pipe = (pipeable, fun, ...other) => {
-  const newPipeable = Pipe(Undefined);
-  newPipeable.valueOf = () => {
-    const index = other.findIndex(v => v == PlaceHolderForPipe);
-    const valueOrPromise = pipeable.valueOf();
-    if (valueOrPromise instanceof Promise) {
-      return valueOrPromise.then(value => _call(fun, index, value, other));
-    } else {
-      return _call(fun, index, valueOrPromise, other);
-    }
-  }
-  return newPipeable;
-}
-
-function Pipe(v = PlaceHolderForPipe, ...others) {
-  if (arguments.length > 0) {
-    if (v == Undefined) {
-      v = undefined;
-    }
-    const valueOf = () => others.length == 0 ? v : [v, ...others];
-    const ret = {}
-    const pipe = _pipe.bind(null, ret);
-    const map = pipe;
-    const then = async (resolve, reject = () => undefined) => {
-      try {
-        const valueOf = ret.valueOf();
-        return resolve(valueOf);
-      } catch (err) {
-        return reject(err);
-      }
-    }
-    return Object.assign(
-      ret,
-      {
-        pipe,
-        map,
-        valueOf,
-        then,
-      }
-    );
-  } else {
-    throw SyntaxError(`At least you shold pipe one value, but you pipe none.`)
-  }
-}
-Pipe.of = Pipe;
 
 module.exports = {
-  Pipe,
-  PlaceHolderForPipe
+  pipe,
+  from: pipe,
+  Pipe: pipe,
+  _
 }
