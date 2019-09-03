@@ -14,12 +14,12 @@ You can get a new pipable object as fellow ways:
 #+include: "./pipe.test.js" src js :lines "1-16"
 
 As then snippet showed, a =pipable= object have methods as fellow:
-+ =pipable.valueOf()= : Get the =v= you want to pipe to other function.
++ =pipable.valueOf()= : 
 
-  So ~pipe(a).valueOf() === a~ is always =true=, as show:
+  Get the =v= you want to pipe to other function.
 
-<code language="js">
-#+include: "./pipe.test.js" src js :lines "30-42"
+  So ~pipe(a).valueOf() === a~ is always =true=:
+#+include: "./pipe.test.js" example :lines "30-42"
 </code>
 
   If =a= is primary type but neither =null= nor =undefined= then ~pipe(a) == a~
@@ -46,17 +46,18 @@ As then snippet showed, a =pipable= object have methods as fellow:
 
 
   
-** Use placeholder set which argument of =fun= take the pipe value
+** Use placeholder set which argument of =fun= take the piped value
 #+include: "./pipe.test.js" src js :lines "43-56"
 
-** =pipable.pipe(fun,...args)= keep =pipable= immutable.
-=pipable.pipe(fn,...args)= will return a new pipable object, not change the old one.
+** =pipable.pipe(fun,...args)= keep =pipable= object immutable.
+=pipable.pipe(fn,...args)= will return a new pipable object,don't change the old one.
 
 #+include: "./pipe.test.js" src js :lines "57-69"
 
 ** =pipable.pipe(fn,...args)= is lazy
 
-The =fn= will not be called until the new =pipable.valueOf()= have been called.
+Call =pipeable.pipe(fn,...args)= do not call =fn=,
+but =pipable.valueOf()=  will call the =fn= if there have one.
 As fellow show:
 
 #+include: "./pipe.test.js" src js :lines "70-78"
@@ -65,9 +66,9 @@ If the value of a pipable is a =Promise=,
 =pipable.pipe(fn)= pipe the resolve value of the promise to =fn=,
 and return a new promise pipable.
 *** Examaples
-#+include: "pipe.test.js" src js :lines "70-92"
+#+include: "pipe.test.js" src js :lines "79-92"
 
-** =pipable<Promise>.promise_rescue=: ~(resolve[,reject])=>Promise~ 
+** =pipable<Promise>.promise_rescue=:
 
 Return a new pipable<Promise>.
 
