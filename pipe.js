@@ -4,14 +4,23 @@ function pipe(valueOrValuOfFunc) {
   const valueOf = typeof valueOrValuOfFunc == 'function' ? valueOrValuOfFunc : () => valueOrValuOfFunc;
   const pipe = _pipe(valueOf, false);
   const promise_rescue = _pipe(valueOf, true);
+  const inspect = _inspect(valueOf);
   return {
     valueOf,
     pipe,
     map: pipe,
+    inspect,
     promise_rescue,
   }
 }
-
+const _inspect = (valueOf) => (fun, ...args) => {
+  const newValueOf = () => {
+    let v = valueOf();
+    _normal(v, args, fun);
+    return v;
+  }
+  return pipe(newValueOf);
+}
 const _pipe = (valueOf, isRescue) => (fun, ...other) => {
   const newValueOf = () => {
     const v = valueOf();

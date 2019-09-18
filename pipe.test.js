@@ -114,3 +114,13 @@ test('pipe promise reject', (done) => {
     }
   )
 })
+
+test('pipeable.inspect(fn)', () => {
+  const fn = jest.fn(a => console.log(a));
+  let a = Pipe(1).inspect(fn);
+  expect(a).not.toBe(null);
+  expect(fn).not.toHaveBeenCalled();
+  let b = a.pipe(fn);
+  expect(b.valueOf()).toBe(undefined);
+  expect(fn).toHaveBeenCalledTimes(2);
+})

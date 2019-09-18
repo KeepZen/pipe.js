@@ -74,3 +74,10 @@ Return a new pipable<Promise>.
 
 If value of =pipable<Promise>= is reject, this method can rescue from the error.
 #+include: "./pipe.test.js" src js :lines "93-117"
+
+** =pipable.inspect(fn, ...args)=
+Return a new =pipable=.
+
+Run then function =fn=, ignor the return value of =fn=, so the value of the pipable will keep not change.
+
+The purpose of this method is helpfully debuging the pipeable chain.
